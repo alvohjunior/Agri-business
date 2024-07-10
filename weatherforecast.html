@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AgriTech</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+    <style>
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+       <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/images/logo.png" alt="AgriCulture" height="40"  width="74">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cropmanagement.html">Crop Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="weatherforecast.html">Weather Forecast</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Soil Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="irrigation.html">Irrigation Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pests.html">Pest Control</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <h3>Agribusiness Record System</h3>
+
+    <!-- Weather Forecast Section -->
+<div id="weatherInfo" class="card">
+  <div class="card-body">
+    <h5 class="card-title">Weather Forecast</h5>
+    <div id="weatherData"></div>
+  </div>
+</div>
+    <hr>
+
+    <!-- Form to input new records -->
+
+      <form id="recordForm">
+  <div class="form-group">
+    <label for="date">Date:</label>
+    <input type="date" class="form-control" id="date" required>
+  </div>
+  <div class="form-group">
+    <label for="recordType">Record Type:</label>
+    <select class="form-control" id="recordType" required>
+      <option value="">Select Record Type</option>
+      <option value="cropYield">Crop Yield</option>
+      <option value="soilMoisture">Soil Moisture</option>
+      <!-- Add more options as needed -->
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<!-- Form fields as before -->
+
+    <hr>
+
+
+    <!-- Table to display records -->
+ <h3>Records</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Record Type</th>
+      <th>Details</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Rows populated dynamically with JavaScript -->
+    <tr>
+      <td>2024-07-08</td>
+      <td>Crop Yield</td>
+      <td>Harvested 1000 kg of wheat</td>
+      <td>
+        <button class="btn btn-sm btn-primary">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+    <!-- Add more rows as needed -->
+  </tbody>
+</table>
+   <h3>Records</h3>
+    <table class="table table-striped">
+      <!-- Table headers and tbody as before -->
+    </table>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Custom JavaScript for weather forecast -->
+  <script>
+
+    document.getElementById('recordForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Collect form data
+  var formData = {
+    date: document.getElementById('date').value,
+    recordType: document.getElementById('recordType').value,
+    // Add more fields as needed
+  };
+
+  // Example: Send data to server
+  fetch('/api/save-record', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Handle successful response (e.g., update table with new record)
+    console.log('Record saved successfully:', data);
+  })
+  .catch(error => {
+    console.error('Error saving record:', error);
+    // Show error message to user
+  });
+});
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to fetch weather data
+      function fetchWeather() {
+        // Replace 'your_api_key' with your actual API key from the weather provider
+        var apiKey = 'your_api_key';
+        var city = 'YourCity'; // Replace with your city or location
+
+        var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // Process weather data
+            var weatherInfo = `
+              <p><strong>Location:</strong> ${data.name}</p>
+              <p><strong>Temperature:</strong> ${data.main.temp} °C</p>
+              <p><strong>Description:</strong> ${data.weather[0].description}</p>
+              <p><strong>Wind Speed:</strong> ${data.wind.speed} m/s</p>
+            `;
+            document.getElementById('weatherInfo').innerHTML = weatherInfo;
+          })
+          .catch(error => {
+            console.error('Error fetching weather data:', error);
+          });
+      }
+
+      // Initial fetch of weather data
+      fetchWeather();
+
+      // Handle form submission (as shown in previous examples)
+      document.getElementById('recordForm').addEventListener('submit', function(event) {
+        // Handle form submission logic
+      });
+    });
+  </script>
+</body>
+</html>

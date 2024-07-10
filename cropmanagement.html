@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AgriTech</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+       <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/images/logo.png" alt="AgriCulture" height="40"  width="74">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cropmanagement.html">Crop Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="weatherforecast.html">Weather Forecast</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Soil Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="irrigation.html">Irrigation Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pests.html">Pest Control</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <h2>Crop Management System</h2>
+
+    <!-- Form to input new crop records -->
+    <form id="cropForm">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="cropName">Crop Name</label>
+          <input type="text" class="form-control" id="cropName" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="cropType">Crop Type</label>
+          <input type="text" class="form-control" id="cropType" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="plantingDate">Planting Date</label>
+          <input type="date" class="form-control" id="plantingDate" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="harvestDate">Harvest Date</label>
+          <input type="date" class="form-control" id="harvestDate" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="yield">Yield (kg)</label>
+          <input type="number" class="form-control" id="yield" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="notes">Notes</label>
+          <textarea class="form-control" id="notes" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="quality">Quality</label>
+          <input type="text" class="form-control" id="quality">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="pests">Pests</label>
+          <input type="text" class="form-control" id="pests">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="fertilizers">Fertilizers Used</label>
+          <input type="text" class="form-control" id="fertilizers">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="addCropBtn">Add Crop</button>
+      <button type="button" class="btn btn-secondary ml-2" id="updateCropBtn" style="display: none;">Update Crop</button>
+      <button type="button" class="btn btn-danger ml-2" id="cancelUpdateBtn" style="display: none;">Cancel</button>
+    </form>
+
+    <hr>
+
+    <!-- Table to display crop records -->
+    <h3>Crop Records</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Crop Name</th>
+          <th>Crop Type</th>
+          <th>Planting Date</th>
+          <th>Harvest Date</th>
+          <th>Yield (kg)</th>
+          <th>Notes</th>
+          <th>Quality</th>
+          <th>Pests</th>
+          <th>Fertilizers Used</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="cropTableBody">
+        <!-- Crop records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Custom JavaScript for crop management -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let crops = []; // Array to hold crop data (can be replaced with backend integration)
+
+      // Function to add or update a crop
+      function addOrUpdateCrop(event) {
+        event.preventDefault();
+
+        // Get form values
+        const cropName = document.getElementById('cropName').value;
+        const cropType = document.getElementById('cropType').value;
+        const plantingDate = document.getElementById('plantingDate').value;
+        const harvestDate = document.getElementById('harvestDate').value;
+        const yield = document.getElementById('yield').value;
+        const notes = document.getElementById('notes').value;
+        const quality = document.getElementById('quality').value;
+        const pests = document.getElementById('pests').value;
+        const fertilizers = document.getElementById('fertilizers').value;
+
+        // Check if we are adding or updating
+        const addCropBtn = document.getElementById('addCropBtn');
+        const updateCropBtn = document.getElementById('updateCropBtn');
+        const cancelUpdateBtn = document.getElementById('cancelUpdateBtn');
+
+        if (addCropBtn.style.display !== 'none') {
+          // Adding new crop
+          const newCrop = {
+            name: cropName,
+            type: cropType,
+            plantingDate: plantingDate,
+            harvestDate: harvestDate,
+            yield: yield,
+            notes: notes,
+            quality: quality,
+            pests: pests,
+            fertilizers: fertilizers
+          };
+          crops.push(newCrop);
+        } else {
+          // Updating existing crop
+          const index = addCropBtn.dataset.index;
+          crops[index].name = cropName;
+          crops[index].type = cropType;
+          crops[index].plantingDate = plantingDate;
+          crops[index].harvestDate = harvestDate;
+          crops[index].yield = yield;
+          crops[index].notes = notes;
+          crops[index].quality = quality;
+          crops[index].pests = pests;
+          crops[index].fertilizers = fertilizers;
+
+          // Reset buttons to default state
+          addCropBtn.style.display = 'inline-block';
+          updateCropBtn.style.display = 'none';
+          cancelUpdateBtn.style.display = 'none';
+        }
+
+        // Clear form inputs
+        document.getElementById('cropForm').reset();
+
+        // Refresh table
+        displayCrops();
+      }
+
+      // Function to display crops in the table
+      function displayCrops() {
+        const tableBody = document.getElementById('cropTableBody');
+        tableBody.innerHTML = '';
+
+        crops.forEach((crop, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${crop.name}</td>
+            <td>${crop.type}</td>
+            <td>${crop.plantingDate}</td>
+            <td>${crop.harvestDate}</td>
+            <td>${crop.yield}</td>
+            <td>${crop.notes}</td>
+            <td>${crop.quality}</td>
+            <td>${crop.pests}</td>
+            <td>${crop.fertilizers}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary" onclick="editCrop(${index})">Edit</button>
+              <button type="button" class="btn btn-sm btn-danger ml-2" onclick="deleteCrop(${index})">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Function to edit a crop
+      function editCrop(index) {
+        const crop = crops[index];
+        document.getElementById('cropName').value = crop.name;
+        document.getElementById('cropType').value = crop.type;
+        document.getElementById('plantingDate').value = crop.plantingDate;
+        document.getElementById('harvestDate').value = crop.harvestDate;
+        document.getElementById('yield').value = crop.yield;
+        document.getElementById('notes').value = crop.notes;
+        document.getElementById('quality').value = crop.quality;
+        document.getElementById('pests').value = crop.pests;
+        document.getElementById('fertilizers').value = crop.fertilizers;
+
+        // Display update and cancel buttons, hide add button
+        document.getElementById('addCropBtn').style.display = 'none';
+        document.getElementById('updateCropBtn').style.display = 'inline-block';
+        document.getElementById('cancelUpdateBtn').style.display = 'inline-block';
+
+        // Store index of crop being updated in dataset for update button
+        document.getElementById('updateCropBtn').dataset.index = index;
+      }
+
+      // Function to delete a crop
+      function deleteCrop(index) {
+        crops.splice(index, 1);
+        displayCrops();
+      }
+
+      // Event listener for crop form submission
+      document.getElementById('cropForm').addEventListener('submit', addOrUpdateCrop);
+
+      // Initial display of crops
+      displayCrops();
+    });
+  </script>
+</body>
+</html>
+

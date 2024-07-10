@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriTech</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+       <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/images/logo.png" alt="AgriCulture" height="40"  width="74">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cropmanagement.html">Crop Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="weatherforecast.html">Weather Forecast</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="soil.html">Soil Analysis</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Irrigation Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pests.html">Pest Control</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1>Irrigation Management</h1>
+    <form id="irrigationForm">
+      <div class="form-group">
+        <label for="field">Field/Area</label>
+        <input type="text" class="form-control" id="field" required>
+      </div>
+      <div class="form-group">
+        <label for="crop">Crop</label>
+        <input type="text" class="form-control" id="crop" required>
+      </div>
+      <div class="form-group">
+        <label for="waterUsage">Water Usage (liters)</label>
+        <input type="number" class="form-control" id="waterUsage" required>
+      </div>
+      <div class="form-group">
+        <label for="irrigationDate">Date</label>
+        <input type="date" class="form-control" id="irrigationDate" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <hr>
+
+    <h2>Manage Irrigation</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field/Area</th>
+          <th>Crop</th>
+          <th>Water Usage (liters)</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="irrigationTableBody">
+        <!-- Irrigation records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Custom JavaScript -->
+  <script src="scripts.js"></script>
+  <script>
+    // JavaScript for handling form submission and displaying irrigation records
+    document.getElementById('irrigationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      let field = document.getElementById('field').value;
+      let crop = document.getElementById('crop').value;
+      let waterUsage = document.getElementById('waterUsage').value;
+      let date = document.getElementById('irrigationDate').value;
+      addIrrigationRecord(field, crop, waterUsage, date);
+      displayIrrigationRecords();
+      document.getElementById('irrigationForm').reset();
+    });
+  </script>
+</body>
+</html>
